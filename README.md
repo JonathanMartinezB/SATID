@@ -69,33 +69,8 @@ streamlit run app.py
 
 La aplicación abrirá normalmente en `http://localhost:8501`.
 
-## 4. Subir el proyecto a GitHub
 
-1. Descomprime la carpeta `SATID` si descargaste el ZIP.
-2. Crea un repositorio vacío en GitHub (por ejemplo, `SATID`).
-3. Abre una terminal dentro de la carpeta del proyecto y ejecuta:
-
-```bash
-git init
-git add .
-git commit -m "Primer prototipo funcional de SATID"
-git branch -M main
-git remote add origin https://github.com/TU_USUARIO/SATID.git
-git push -u origin main
-```
-
-Cambia `TU_USUARIO` por tu usuario real de GitHub.
-
-## 5. Publicar gratuitamente con Streamlit Community Cloud
-
-1. Inicia sesión en [Streamlit Community Cloud](https://share.streamlit.io/).
-2. Selecciona **New app** y el repositorio que acabas de subir.
-3. Selecciona la rama `main` y el archivo principal `app.py`.
-4. Despliega la aplicación. Las dependencias se instalan desde `requirements.txt`.
-
-**Persistencia:** la base SQLite se crea en `data/satid.sqlite3`, pero está excluida de Git. En un despliegue gratuito el almacenamiento local no debe considerarse una base de datos permanente ni compartida entre varias instancias. Descarga respaldos CSV desde el panel y guarda copias fuera de la aplicación. Para una versión multiusuario o persistente, conecta una base de datos administrada (por ejemplo PostgreSQL/Supabase) y define autenticación y control de acceso.
-
-## 6. Uso de la aplicación
+## 4. Uso de la aplicación
 
 1. En el panel izquierdo selecciona **Aquitania - centro urbano** o crea otra zona mediante búsqueda o coordenadas.
 2. Abre **Panel de alerta** y revisa las variables consultadas. La primera carga requiere conexión a internet.
@@ -121,29 +96,8 @@ precip_24h_mm,precip_72h_mm,forecast_24h_mm,soil_moisture,elevation_m,label
 
 Se exigen al menos 30 filas válidas, dos clases y cinco registros por clase. Este mínimo solo permite ejecutar el experimento de software; no garantiza que los datos sean suficientes desde el punto de vista hidrológico. El conjunto de prueba es aleatorio y por ello sus métricas no equivalen al hindcasting temporal 2016–2024 descrito en el documento del proyecto.
 
-## 7. Arquitectura del repositorio
 
-```text
-SATID/
-├── app.py                         # Interfaz Streamlit
-├── requirements.txt
-├── README.md
-├── LICENSE
-├── .gitignore
-├── .streamlit/config.toml
-├── satid/
-│   ├── config.py                   # Variables y umbrales por defecto
-│   ├── storage.py                  # SQLite, zonas, observaciones, fuentes y GeoJSON
-│   ├── providers.py                # Open-Meteo, Nominatim, Overpass y GloFAS
-│   ├── risk.py                     # Reglas de alerta y Random Forest opcional
-│   └── geo.py                      # Mapa Folium
-├── data/
-│   └── plantilla_entrenamiento_rf.csv
-└── tests/
-    └── test_risk.py
-```
-
-## 8. Correspondencia con el documento de grado
+## 6. Correspondencia con el documento de grado
 
 | Elemento formulado | Implementación del prototipo |
 |---|---|
@@ -159,24 +113,14 @@ SATID/
 
 **Diferencias deliberadas:** al no contar con el flujo de procesamiento Sentinel de Google Earth Engine en este prototipo, no se calculan NDVI ni NDFI, no se clasifica cobertura del suelo y no se declara un modelo hidrológico calibrado. El acceso a Copernicus Browser se deja como flujo de consulta/descarga independiente. Estos componentes pueden añadirse en una fase posterior con datos, credenciales y validación específicos.
 
-## 9. Ejecutar pruebas
+## 7. Ejecutar pruebas
 
 ```bash
 pip install pytest
 pytest -q
 ```
 
-## 10. Mejoras necesarias antes de una validación de campo
-
-- Reunir registros fechados y georreferenciados de inundaciones / desbordamientos con el Cuerpo de Bomberos Voluntarios de Aquitania.
-- Incorporar observaciones de pluviómetros y niveles de quebradas, si están disponibles, y comparar con el reanálisis.
-- Delimitar microcuencas y zonas de exposición; el prototipo actual usa puntos y celdas meteorológicas, no polígonos hidrológicos.
-- Calibrar umbrales con series locales y validar con partición temporal, sensibilidad, precisión, recall y falsas alarmas.
-- Añadir procesamiento Sentinel-1/2 y clasificación de coberturas antes de afirmar que se cumplen esos objetivos específicos.
-- Concertar umbrales y protocolo de actuación con Bomberos y autoridades, en el marco de la Ley 1523 de 2012.
-- Incorporar autenticación, roles, monitoreo de API, registro de auditoría y una base persistente para despliegue multiusuario.
-
-## 11. Licencias y atribución
+## 8. Licencias y atribución
 
 El código de este prototipo se distribuye bajo MIT. Los datos y servicios externos conservan sus propias licencias. Open-Meteo solicita atribución (CC BY 4.0); OpenStreetMap requiere atribución y está sujeto a ODbL y a políticas específicas de sus servicios de teselas y Nominatim; Copernicus y NASA GIBS tienen sus propias condiciones de uso. Consulta siempre los términos vigentes antes de desplegar públicamente o usar los datos en un producto comercial.
 
